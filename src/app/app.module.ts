@@ -1,3 +1,7 @@
+import { ReceitaPage } from './../pages/receita/receita';
+import { ReceitasService } from './../service/receitas';
+import { EditaReceitaPage } from './../pages/edita-receita/edita-receita';
+import { ListaComprasService } from './../service/lista-compra';
 import { BrowserModule } from '@angular/platform-browser';
 import { ErrorHandler, NgModule } from '@angular/core';
 import { IonicApp, IonicErrorHandler, IonicModule } from 'ionic-angular';
@@ -16,7 +20,9 @@ import { ListaComprasPage } from './../pages/lista-compras/lista-compras';
     HomePage,
     TabsPage,
     ListaComprasPage,
-    ReceitasPage
+    ReceitasPage,
+    EditaReceitaPage,
+    ReceitaPage
   ],
   imports: [
     BrowserModule,
@@ -28,11 +34,15 @@ import { ListaComprasPage } from './../pages/lista-compras/lista-compras';
     HomePage,
     TabsPage,
     ListaComprasPage,
-    ReceitasPage
+    ReceitasPage,
+    EditaReceitaPage,
+    ReceitaPage
   ],
   providers: [
     StatusBar,
     SplashScreen,
+    ListaComprasService,
+    ReceitasService,
     { provide: ErrorHandler, useClass: IonicErrorHandler }
   ]
 })
