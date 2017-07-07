@@ -1,8 +1,8 @@
-import { Receita } from './../../module/receita';
-import { ReceitasService } from './../../service/receitas';
 import { Component } from '@angular/core';
 import { NavController, NavParams, ActionSheetController, AlertController, ToastController } from 'ionic-angular';
 import { FormGroup, FormControl, Validators, FormArray } from "@angular/forms";
+import { ReceitasService } from './../../service/receitas';
+import { Receita } from './../../module/receita';
 
 @Component({
   selector: 'page-edita-receita',
@@ -23,7 +23,9 @@ export class EditaReceitaPage {
     private alertController: AlertController,
     private toastController: ToastController,
     private receitasService: ReceitasService) {
+
     this.mode = this.navParams.get('mode');
+
     if (this.mode == 'Altera') {
       this.receita = navParams.get('receita');
       this.index = navParams.get('index');
@@ -121,48 +123,41 @@ export class EditaReceitaPage {
   private criaAlertaNovoIngrediente() {
 
     return this.alertController.create({
-      title: 'Adiciona Ingrediente',      
+      title: 'Adiciona Ingrediente',
       inputs: [
         {
           name: 'nome',
-          placeholder: 'Nome',
-          handler: () => {
-            console.log('Adicionado clicked');
-          }
+          placeholder: 'Nome'
         }
       ],
       buttons: [
         {
           text: 'Cancela',
-          role: 'cancel',
-          handler: () => {            
-            console.log('Cancel clicked');
-          }
+          role: 'cancel'
         },
         {
           text: 'Adiciona',
           handler: data => {
             if (data.nome.trim() == '' || data.nome == null) {
-              const toast = this.toastController.create({
-                message: 'Entre com um valor válido!',
-                duration: 2000,
-                position: 'bottom'
-              });
-              toast.present();
+              this.mensagem('Entre com um valor válido!');
               return;
             }
             (<FormArray>this.formReceita.get('ingredientes'))
               .push(new FormControl(data.nome, Validators.required));
-            const toast = this.toastController.create({
-              message: 'Ingrediente adicionado',
-              duration: 2000,
-              position: 'bottom'
-            });
-            toast.present();
+            this.mensagem('Ingrediente adicionado');
           }
         }
       ]
     });
+  }
+
+  mensagem(valor: string) {
+    const toast = this.toastController.create({
+      message: valor,
+      duration: 2000,
+      position: 'bottom'
+    });
+    toast.present();
   }
 
 }

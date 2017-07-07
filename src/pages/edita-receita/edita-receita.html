@@ -29,7 +29,8 @@
     <button type="button" clear ion-button block (click)="editaIngredientes()">Ingredientes</button>
     
     <ion-list formArrayName="ingredientes">
-      <ion-item *ngFor="let igControl of formReceita.get('ingredientes').controls; let i = index">
+      <ion-item *ngFor="let igControl of formReceita.get('ingredientes').controls; 
+      let i = index">
         <ion-label>Nome</ion-label>
         <ion-input type="text" [formControlName]="i"></ion-input>
       </ion-item>
