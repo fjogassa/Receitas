@@ -16,6 +16,7 @@ export class EditaReceitaPage {
   formReceita: FormGroup;
   receita: Receita;
   index: number;
+  actionSheet;
 
   constructor(public navCtrl: NavController,
     public navParams: NavParams,
@@ -76,20 +77,16 @@ export class EditaReceitaPage {
 
   editaIngredientes() {
 
-    const actionSheet = this.actionSheetController.create({
+    this.actionSheet = this.actionSheetController.create({
       title: 'Escolha uma opção',
       buttons: [
         {
           text: 'Adiciona ingrediente',
+          role: '',
           handler: () => {
-            this.criaAlertaNovoIngrediente().present();
-          }
-        },
-        {
-          text: 'Remove um ingrediente',
-          role: 'destructive',
-          handler: () => {
-            console.log('Remover um item')
+            this.actionSheet.dismiss();
+            this.criaAlertaNovoIngrediente().present();          
+            return false;
           }
         },
         {
@@ -102,12 +99,7 @@ export class EditaReceitaPage {
               for (let i = len - 1; i >= 0; i--) {
                 fArray.removeAt(i);
               }
-              const toast = this.toastController.create({
-                message: 'Todos ingrediente removidos',
-                duration: 2000,
-                position: 'bottom'
-              });
-              toast.present();
+              this.mensagem('Todos ingrediente removidos');
             }
           }
         },
@@ -117,7 +109,7 @@ export class EditaReceitaPage {
         }
       ]
     });
-    actionSheet.present();
+    this.actionSheet.present();
   }
 
   private criaAlertaNovoIngrediente() {
@@ -151,6 +143,31 @@ export class EditaReceitaPage {
     });
   }
 
+  private removeIngrediente(index: number) {
+    this.actionSheet = this.actionSheetController.create({
+      title: 'Deseja realmente remover o ingrediente?',
+      buttons: [
+        {
+          text: 'Confirma',
+          role: '',
+          handler: () => {
+            console.log(index);
+            const fArray: FormArray = <FormArray>this.formReceita.get('ingredientes');
+            const len = fArray.length;
+            if (len > 0) {
+              fArray.removeAt(index);
+            }
+          }
+        },
+        {
+          text: 'Cancelar',
+          role: 'cancel'
+        }
+      ]
+    });
+    this.actionSheet.present();
+  }
+
   mensagem(valor: string) {
     const toast = this.toastController.create({
       message: valor,
@@ -159,5 +176,4 @@ export class EditaReceitaPage {
     });
     toast.present();
   }
-
 }
