@@ -1,7 +1,7 @@
 import { ListaComprasService } from './../../service/lista-compra';
 import { Ingrediente } from './../../module/ingrediente';
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, ActionSheetController } from 'ionic-angular';
 import { NgForm } from "@angular/forms/forms";
 
 @IonicPage()
@@ -12,12 +12,15 @@ import { NgForm } from "@angular/forms/forms";
 export class ListaComprasPage {
 
   listaItens: Ingrediente[];
+  actionSheet;
 
-  constructor(private listaComprasService: ListaComprasService) { }
+  constructor(private listaComprasService: ListaComprasService, private actionSheetController: ActionSheetController) {
+
+  }
 
   incluiItem(form: NgForm) {
     console.log(form);
-    this.listaComprasService.incluiItem(form.value.nomeIngrediente, form.value.qtdeIngrediente);
+    this.listaComprasService.adicionaItem(form.value.nomeIngrediente, Number.parseInt(form.value.qtdeIngrediente));
     form.reset();
     this.carregaItens();
   }
@@ -31,8 +34,25 @@ export class ListaComprasPage {
   }
 
   removeItem(index: number) {
-    this.listaComprasService.removeItem(index);
-    this.carregaItens();
+    this.actionSheet = this.actionSheetController.create({
+      title: 'Deseja realmente remover a lista de compra?',
+      buttons: [
+        {
+          text: 'Confirma',
+          role: '',
+          handler: () => {
+            this.listaComprasService.removeItem(index);
+            this.carregaItens();
+          }
+        },
+        {
+          text: 'Cancelar',
+          role: 'cancel'
+        }
+      ]
+    });
+    this.actionSheet.present();
+
   }
 
 }

@@ -3,6 +3,7 @@ import { NavController, NavParams, ActionSheetController, AlertController, Toast
 import { FormGroup, FormControl, Validators, FormArray } from "@angular/forms";
 import { ReceitasService } from './../../service/receitas';
 import { Receita } from './../../module/receita';
+import { Ingrediente } from '../../module/ingrediente';
 
 @Component({
   selector: 'page-edita-receita',
@@ -85,7 +86,7 @@ export class EditaReceitaPage {
           role: '',
           handler: () => {
             this.actionSheet.dismiss();
-            this.criaAlertaNovoIngrediente().present();          
+            this.criaAlertaNovoIngrediente().present();
             return false;
           }
         },
@@ -144,6 +145,7 @@ export class EditaReceitaPage {
   }
 
   private removeIngrediente(index: number) {
+    
     this.actionSheet = this.actionSheetController.create({
       title: 'Deseja realmente remover o ingrediente?',
       buttons: [

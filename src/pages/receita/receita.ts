@@ -3,7 +3,7 @@ import { Receita } from './../../module/receita';
 import { ReceitasService } from './../../service/receitas';
 import { EditaReceitaPage } from './../edita-receita/edita-receita';
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, ToastController } from 'ionic-angular';
 
 @IonicPage()
 @Component({
@@ -14,8 +14,10 @@ export class ReceitaPage {
 
   receita: Receita;
   index: number;
+  actionSheet;
 
   constructor(public navCtrl: NavController, public navParams: NavParams,
+    private toastController: ToastController,
     private listaComprasService: ListaComprasService,
     private receitasService: ReceitasService) {
   }
@@ -35,7 +37,17 @@ export class ReceitaPage {
   }
 
   adicionaIngredientes() {
-    this.listaComprasService.incluiItens(this.receita.ingredientes);
+    this.listaComprasService.incluiItens(this.receita.ingredientes); 
+    this.mensagem('Ingredientes adicionados com sucesso.')
+  }
+
+  mensagem(valor: string) {
+    const toast = this.toastController.create({
+      message: valor,
+      duration: 2000,
+      position: 'bottom'
+    });
+    toast.present();
   }
 
 }
