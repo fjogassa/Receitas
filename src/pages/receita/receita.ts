@@ -3,7 +3,7 @@ import { Receita } from './../../module/receita';
 import { ReceitasService } from './../../service/receitas';
 import { EditaReceitaPage } from './../edita-receita/edita-receita';
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams, ToastController } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, ToastController, ActionSheetController } from 'ionic-angular';
 
 @IonicPage()
 @Component({
@@ -19,7 +19,8 @@ export class ReceitaPage {
   constructor(public navCtrl: NavController, public navParams: NavParams,
     private toastController: ToastController,
     private listaComprasService: ListaComprasService,
-    private receitasService: ReceitasService) {
+    private receitasService: ReceitasService,
+    private actionSheetController: ActionSheetController) {
   }
 
   ngOnInit(): void {
@@ -32,8 +33,24 @@ export class ReceitaPage {
   }
 
   removeReceita() {
-    this.receitasService.removeReceita(this.index);
-    this.navCtrl.popToRoot();
+    this.actionSheet = this.actionSheetController.create({
+      title: 'Deseja realmente remover a receita?',
+      buttons: [
+        {
+          text: 'Confirma',
+          role: '',
+          handler: () => {
+            this.receitasService.removeReceita(this.index);            
+            this.navCtrl.popToRoot();
+          }
+        },
+        {
+          text: 'Cancelar',
+          role: 'cancel'
+        }
+      ]
+    });
+    this.actionSheet.present();     
   }
 
   adicionaIngredientes() {
